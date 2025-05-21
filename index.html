@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Credentialing Search</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the Inter font */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div class="flex flex-col items-center justify-center bg-white p-8 rounded-lg shadow-xl max-w-md w-full">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+            Agent for Provider Credentialing
+        </h1>
+        <p class="text-gray-600 text-center mb-8">
+            Ask questions and get answers about the provider credentialing process.
+        </p>
+
+        <script src="https://cloud.google.com/ai/gen-app-builder/client?hl=en_US"></script>
+
+        <!-- Search widget element - This component integrates the search functionality.
+             It's not visible by default and will open when the triggerId element is clicked. -->
+        <gen-search-widget
+            configId="6e2c3eb2-bed9-4551-a0b5-ec2450a59b4f"
+            location="us"
+            triggerId="searchWidgetTrigger">
+        </gen-search-widget>
+
+        <!-- Element that opens the widget on click.
+             This input field acts as the trigger for the search widget. -->
+        <input
+            placeholder="Search here..."
+            id="searchWidgetTrigger"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg shadow-sm"
+        />
+    </div>
+</body>
+</html>
