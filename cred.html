@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Credentialing Portal</title>
+    <link rel="icon" href="https://example.com/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Color Palette Inspired by Salesforce */
+        :root {
+            --sf-blue-dark: #004e9c; /* A deeper blue for primary emphasis */
+            --sf-blue-medium: #0070d2; /* Salesforce standard blue */
+            --sf-blue-light: #007bff; /* Similar to Bootstrap primary, good for hover */
+            --sf-green-success: #2e8540; /* A strong green for success/action */
+            --sf-text-dark: #2c323a; /* Darker grey for primary text */
+            --sf-text-medium: #54698d; /* Medium grey for secondary text */
+            --sf-background-light: #f3f6f9; /* Off-white for background */
+            --sf-surface-white: #ffffff; /* Pure white for cards/sections */
+            --sf-border-light: #d8dde6; /* Light grey for borders */
+            --sf-shadow-light: rgba(0, 0, 0, 0.05); /* Subtle shadow */
+            --sf-shadow-medium: rgba(0, 0, 0, 0.1); /* More pronounced shadow */
+        }
+
+        body {
+            font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--sf-background-light);
+            color: var(--sf-text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(90deg, var(--sf-blue-dark) 0%, var(--sf-blue-medium) 100%);
+            color: var(--sf-surface-white);
+            padding: 2em 0;
+            text-align: center;
+            box-shadow: 0 2px 8px var(--sf-shadow-medium);
+            position: relative;
+        }
+        header h1 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 2.8em;
+        }
+        header p {
+            margin: 0.8em 0 0;
+            font-weight: 300;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-nav {
+            margin-top: 2em;
+            margin-bottom: 1.5em;
+        }
+        .main-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        .main-nav a {
+            color: var(--sf-surface-white);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 18px;
+            transition: background-color 0.2s ease, border-radius 0.2s ease, transform 0.1s ease;
+            font-size: 1.05em;
+            border-bottom: 2px solid transparent;
+        }
+        .main-nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            transform: translateY(-2px);
+            border-bottom: 2px solid var(--sf-surface-white);
+        }
+
+        .cta-button, .card-link {
+            display: inline-block;
+            background-color: var(--sf-green-success);
+            color: var(--sf-surface-white);
+            padding: 14px 30px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+            margin-top: 2em;
+            box-shadow: 0 4px 10px var(--sf-shadow-medium);
+            border: none;
+            cursor: pointer;
+        }
+        .cta-button:hover, .card-link:hover {
+            background-color: #246a32;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px var(--sf-shadow-medium);
+        }
+        .card-link {
+            padding: 10px 20px;
+            font-size: 1em;
+            margin-top: 1.5em;
+            background-color: var(--sf-blue-medium);
+            box-shadow: 0 2px 5px var(--sf-shadow-light);
+        }
+        .card-link:hover {
+            background-color: var(--sf-blue-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--sf-shadow-light);
+        }
+
+        .container {
+            width: 88%;
+            max-width: 1200px;
+            margin: 30px auto;
+            overflow: hidden;
+            padding: 30px 0;
+            flex-grow: 1;
+        }
+        section {
+            background-color: var(--sf-surface-white);
+            padding: 35px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px var(--sf-shadow-light);
+            border: 1px solid var(--sf-border-light);
+        }
+        h2 {
+            color: var(--sf-blue-dark);
+            margin-top: 0;
+            border-bottom: 2px solid var(--sf-border-light);
+            padding-bottom: 0.8em;
+            margin-bottom: 1.5em;
+            font-size: 2em;
+            font-weight: 600;
+        }
+        p {
+            margin-bottom: 1em;
+            color: var(--sf-text-medium);
+        }
+        ul {
+            list-style: disc;
+            padding-left: 25px;
+            margin-bottom: 1.5em;
+            color: var(--sf-text-medium);
+        }
+        li {
+            margin-bottom: 0.5em;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 25px;
+        }
+        .resource-card {
+            background-color: var(--sf-background-light);
+            border: 1px solid var(--sf-border-light);
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 3px 10px var(--sf-shadow-light);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px var(--sf-shadow-medium);
+        }
+        .resource-card h3 {
+            color: var(--sf-blue-dark);
+            margin-top: 0;
+            font-size: 1.4em;
+            margin-bottom: 0.8em;
+        }
+        .resource-card p {
+            font-size: 0.95em;
+            color: var(--sf-text-medium);
+            margin-bottom: 1.8em;
+        }
+
+        .faq-item {
+            background-color: var(--sf-surface-white);
+            border: 1px solid var(--sf-border-light);
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px var(--sf-shadow-light);
+        }
+        .faq-item h3 {
+            color: var(--sf-blue-medium);
+            margin-top: 0;
+            font-size: 1.25em;
+            cursor: pointer;
+            padding-bottom: 0.5em;
+            border-bottom: 1px solid transparent;
+            transition: color 0.2s ease, border-bottom 0.2s ease;
+        }
+        .faq-item h3:hover {
+            color: var(--sf-blue-dark);
+            border-bottom: 1px solid var(--sf-blue-medium);
+        }
+        .faq-item p {
+            color: var(--sf-text-dark);
+            font-size: 1em;
+            line-height: 1.7;
+            padding-top: 0.5em;
+        }
+
+        footer {
+            background-color: var(--sf-text-dark);
+            color: var(--sf-background-light);
+            text-align: center;
+            padding: 1.8em 0;
+            position: relative;
+            width: 100%;
+            font-size: 0.9em;
+            margin-top: auto;
+        }
+
+        .chatbot-icon-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+        .chatbot-icon {
+            background-color: var(--sf-blue-medium);
+            color: var(--sf-surface-white);
+            border-radius: 50%;
+            width: 75px;
+            height: 75px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.8em;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            transition: transform 0.25s ease-in-out, background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .chatbot-icon:hover {
+            transform: scale(1.1);
+            background-color: var(--sf-blue-dark);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        #searchWidgetTrigger {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5em 0.5em;
+            }
+            header h1 {
+                font-size: 2.2em;
+            }
+            header p {
+                font-size: 1em;
+            }
+            .cta-button {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+            .container {
+                width: 95%;
+                padding: 20px 0;
+                margin: 20px auto;
+            }
+            section {
+                padding: 25px;
+                margin-bottom: 20px;
+            }
+            h2 {
+                font-size: 1.7em;
+                padding-bottom: 0.6em;
+            }
+            .chatbot-icon {
+                width: 65px;
+                height: 65px;
+                font-size: 2.3em;
+            }
+            .chatbot-icon-container {
+                bottom: 20px;
+                right: 20px;
+            }
+            .main-nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .main-nav a {
+                padding: 8px 15px;
+                font-size: 0.95em;
+            }
+            .resource-grid {
+                grid-template-columns: 1fr;
+            }
+            .resource-card {
+                padding: 20px;
+            }
+            .faq-item {
+                padding: 15px 20px;
+            }
+            .faq-item h3 {
+                font-size: 1.1em;
+            }
+            .faq-item p {
+                font-size: 0.95em;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Provider Credentialing Hub</h1>
+        <p>Your central resource for credentialing information and streamlined processes.</p>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#understanding">Understanding</a></li>
+                <li><a href="#importance">Importance</a></li>
+                <li><a href="#resources">Resources</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <a href="#resources" class="cta-button">Explore Key Resources</a>
+    </header>
+
+    <div class="container">
+        <section id="understanding">
+            <h2>Understanding Provider Credentialing</h2>
+            <p>Provider credentialing verifies a healthcare provider's qualifications, including education, training, licensure, and professional history. This rigorous review ensures providers meet standards for **safe and quality patient care** and helps organizations comply with regulations. Our portal simplifies this crucial process for providers and administrators.</p>
+            <ul>
+                <li>Clear guidelines on required documentation</li>
+                <li>Access to helpful forms and templates</li>
+                <li>Answers to frequently asked questions</li>
+                <li>Direct support channels for assistance</li>
+            </ul>
+        </section>
+
+        <section id="importance">
+            <h2>The Importance of Accurate Credentialing</h2>
+            <p>Accurate and timely credentialing is fundamental for patient safety, regulatory adherence, and maintaining healthcare service integrity. It ensures qualified professionals deliver care, crucial for **participation in health plan networks and government programs** (Medicare/Medicaid), directly impacting revenue. Delays or errors can lead to significant financial and legal repercussions.</p>
+        </section>
+
+        <section id="resources">
+            <h2>Key Resources & Next Steps</h2>
+            <div class="resource-grid">
+                <div class="resource-card">
+                    <h3>Application Checklist</h3>
+                    <p>Download our comprehensive checklist to ensure you have all necessary documents for a smooth and efficient application submission.</p>
+                    <a href="https://example.com/credentialing-checklist.pdf" target="_blank" class="card-link">Download Checklist</a>
+                </div>
+                <div class="resource-card">
+                    <h3>Credentialing FAQ</h3>
+                    <p>Find quick, authoritative answers to the most common questions encountered throughout the credentialing process.</p>
+                    <a href="#faq" class="card-link">View FAQs</a>
+                </div>
+                <div class="resource-card">
+                    <h3>Contact Support</h3>
+                    <p>Need personalized assistance or have complex questions specific to your situation? Our dedicated support team is ready to help.</p>
+                    <a href="#contact" class="card-link">Get Support</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <h3>What is the typical credentialing timeline?</h3>
+                <p>Timelines vary based on application completeness and third-party responsiveness, typically 30-90 days. Prompt and accurate documentation submission helps expedite the process.</p>
+            </div>
+            <div class="faq-item">
+                <h3>How often do I need to re-credential?</h3>
+                <p>Re-credentialing usually occurs every three years for most health plans and facilities. Requirements may vary by state and payer; you'll receive advance notification.</p>
+            </div>
+            <div class="faq-item">
+                <h3>What documents are typically required for credentialing?</h3>
+                <p>Commonly needed documents include: current professional license(s), DEA certificate (if applicable), board certification, malpractice insurance, education/training certificates, and references. A detailed checklist is in our resources section.</p>
+            </div>
+            </section>
+
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>If you have further questions or need direct assistance with your credentialing application, please don't hesitate to reach out to our dedicated support team.</p>
+            <p><strong>Email:</strong> <a href="mailto:support@credentialinghub.com">support@credentialinghub.com</a></p>
+            <p><strong>Phone:</strong> <a href="tel:+11234567890">(123) 456-7890</a></p>
+            <p>Our expert team is available Monday to Friday, 9:00 AM - 5:00 PM EST.</p>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Provider Credentialing Portal. All rights reserved.</p>
+    </footer>
+
+    <div class="chatbot-icon-container">
+        <div class="chatbot-icon" id="chatbotToggle">💬</div>
+    </div>
+
+    <script src="https://cloud.google.com/ai/gen-app-builder/client?hl=en_US"></script>
+
+    <gen-search-widget
+        configId="6e2c3eb2-bed9-4551-a0b5-ec2450a59b4f"
+        location="us"
+        triggerId="searchWidgetTrigger">
+    </gen-search-widget>
+
+    <input type="button" id="searchWidgetTrigger" style="display: none;" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatbotToggle = document.getElementById('chatbotToggle');
+            const searchWidgetTrigger = document.getElementById('searchWidgetTrigger');
+
+            chatbotToggle.addEventListener('click', function() {
+                searchWidgetTrigger.click();
+            });
+        });
+    </script>
+</body>
+</html>
